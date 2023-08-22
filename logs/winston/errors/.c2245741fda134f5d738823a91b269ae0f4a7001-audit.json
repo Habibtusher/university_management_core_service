@@ -1,0 +1,30 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\PHero\\university-management-core-service-starter\\logs\\winston\\errors\\.c2245741fda134f5d738823a91b269ae0f4a7001-audit.json",
+    "files": [
+        {
+            "date": 1692672510522,
+            "name": "D:\\PHero\\university-management-core-service-starter\\logs\\winston\\errors\\phu-2023-22-08-08-error.log",
+            "hash": "5ea4a671027be596f29d85ee01e77c9bfa93cb7eed1c4deb5d8f94e8a9d7cbe8"
+        },
+        {
+            "date": 1692673369951,
+            "name": "D:\\PHero\\university-management-core-service-starter\\logs\\winston\\errors\\phu-2023-22-08-09-error.log",
+            "hash": "1d9e779ff3968085a3b62025780bee3c483143fce56ede45b6935aec369539ff"
+        },
+        {
+            "date": 1692677234812,
+            "name": "D:\\PHero\\university-management-core-service-starter\\logs\\winston\\errors\\phu-2023-22-08-10-error.log",
+            "hash": "05a703b9e90a02596aed482ff88615981ea2007e45fb3c60a246ca5d48262b9b"
+        },
+        {
+            "date": 1692718026748,
+            "name": "D:\\PHero\\university-management-core-service-starter\\logs\\winston\\errors\\phu-2023-22-08-21-error.log",
+            "hash": "64a305251b3c86d716d40aad083a47440983fcd3862f791a24bbc0da715f6f7c"
+        }
+    ],
+    "hashType": "sha256"
+}

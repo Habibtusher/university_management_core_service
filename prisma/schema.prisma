@@ -58,7 +58,7 @@ model Student {
   middleName   String
   profileImage String
   email        String
-  contactNo    Int
+  contactNo    String
   gender       String
   bloodGroup   String
   createdAt    DateTime @default(now())
@@ -84,7 +84,7 @@ model Faculty {
   middleName   String
   profileImage String
   email        String
-  contactNo    Int
+  contactNo    String
   gender       String
   bloodGroup   String
   designation  String
@@ -98,4 +98,8 @@ model Faculty {
   academicDepartmentId String
 
   @@map("faculties")
+}
+
+model newemh {
+  id String @id @default(uuid())
 }
