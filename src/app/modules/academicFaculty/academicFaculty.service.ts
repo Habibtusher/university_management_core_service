@@ -1,28 +1,29 @@
-import { AcademicSemester, Prisma } from '@prisma/client';
+import { AcademicFaculty, Prisma } from '@prisma/client';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { AcademicSemesterSearchableFields } from './academicSemester.const';
-import { IAcademicSemesterFilterRequest } from './academicSemester.interface';
+import { AcademicFacultySearchableFields } from './academicFaculty.const';
+import { IAcademicFacultyFilterRequest } from './academicFaculty.interface';
 
 const insertIntoDb = async (
-  data: AcademicSemester
-): Promise<AcademicSemester> => {
-  const result = await prisma.academicSemester.create({
+  data: AcademicFaculty
+): Promise<AcademicFaculty> => {
+  const result = await prisma.academicFaculty.create({
     data,
   });
   return result;
 };
-
 const getAllData = async (
-  filters: IAcademicSemesterFilterRequest,
+  filters: IAcademicFacultyFilterRequest,
   options: IPaginationOptions
-): Promise<IGenericResponse<AcademicSemester[]>> => {
+): Promise<IGenericResponse<AcademicFaculty[]>> => {
   const { page, limit, skip } = paginationHelpers.calculatePagination(options);
   const { searchTerm, ...filterData } = filters;
 
+  console.log(filterData, AcademicFacultySearchableFields);
   const andCondition = [];
+
   if (Object.keys(filterData).length) {
     andCondition.push({
       AND: Object.keys(filterData).map(key => ({
@@ -32,11 +33,10 @@ const getAllData = async (
       })),
     });
   }
-  console.log(filterData);
 
   if (searchTerm) {
     andCondition.push({
-      OR: AcademicSemesterSearchableFields.map(field => ({
+      OR: AcademicFacultySearchableFields.map(field => ({
         [field]: {
           contains: searchTerm,
           mode: 'insensitive',
@@ -45,9 +45,9 @@ const getAllData = async (
     });
   }
 
-  const whereConditions: Prisma.AcademicSemesterWhereInput =
+  const whereConditions: Prisma.AcademicFacultyWhereInput =
     andCondition.length > 0 ? { AND: andCondition } : {};
-  const result = await prisma.academicSemester.findMany({
+  const result = await prisma.academicFaculty.findMany({
     where: whereConditions,
     skip,
     take: limit,
@@ -60,7 +60,7 @@ const getAllData = async (
             createdAt: 'desc',
           },
   });
-  const total = await prisma.academicSemester.count();
+  const total = await prisma.academicFaculty.count();
   return {
     meta: {
       total,
@@ -70,28 +70,17 @@ const getAllData = async (
     data: result,
   };
 };
-const getDataById = async (id: string): Promise<AcademicSemester | null> => {
-  const result = await prisma.academicSemester.findUnique({
+const getDataById = async (id: string): Promise<AcademicFaculty | null> => {
+  const result = await prisma.academicFaculty.findUnique({
     where: {
       id,
     },
   });
   return result;
 };
-const uniqueSemester = async () => {
-  const result = await prisma.academicSemester.findMany({
-    select: {
-      id: true,
-      code: true,
-      title: true,
-    },
-    distinct: ['title'], // This will fetch distinct semester values
-  });
-  return result;
-};
-export const AcademicSemesterService = {
+
+export const AcademicFacultyService = {
   insertIntoDb,
   getAllData,
   getDataById,
-  uniqueSemester,
 };
