@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\successes\\.bc8dace1c7b698af30c8521efffa0c40976bddf9-audit.json",
+    "files": [
+        {
+            "date": 1693628421445,
+            "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\successes\\phu-2023-02-09-10-success.log",
+            "hash": "c6aa6b372951f3539d26d5f3bdea4b4c2709a96aee3f60d89b559cd6180d5396"
+        }
+    ],
+    "hashType": "sha256"
+}
