@@ -9,6 +9,16 @@
             "date": 1693628421454,
             "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\errors\\phu-2023-02-09-10-error.log",
             "hash": "1a7ee4700ba0e93a9a37800f04205cac37be6b7eef6f8e90ce3cff8b99f4ebb5"
+        },
+        {
+            "date": 1693710547410,
+            "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\errors\\phu-2023-03-09-09-error.log",
+            "hash": "97e8de6e831f991160dab93786e799c59e00b8c0e5d6f7c3d1d45e2a13ec43f6"
+        },
+        {
+            "date": 1693713780192,
+            "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\errors\\phu-2023-03-09-10-error.log",
+            "hash": "9e2eaa390eed87ab7b8dbc4d8a03b229f5c3a0c68b82ad937f73489f46dcba84"
         }
     ],
     "hashType": "sha256"
