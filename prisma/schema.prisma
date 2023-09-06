@@ -105,7 +105,7 @@ model Building {
   title     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  rooms      Room[]
+  rooms     Room[]
 
   @@map("buildings")
 }
@@ -118,6 +118,28 @@ model Room {
   updatedAt  DateTime @updatedAt
   building   Building @relation(fields: [buildingId], references: [id])
   buildingId String
-  
-   @@map("rooms")
+
+  @@map("rooms")
+}
+model Course {
+  id              String                 @id @default(uuid())
+  title           String
+  code            String
+  credits         Int                    @default(0)
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  preRequisite    CourseToPrerequisite[] @relation("CourseToPrerequisite")
+  preRequisiteFor CourseToPrerequisite[] @relation("PrerequisiteToCourse")
+
+  @@map("courses")
+}
+
+model CourseToPrerequisite {
+  courseId       String
+  preRequisiteId String
+
+  course       Course @relation(fields: [courseId], references: [id], name: "CourseToPrerequisite")
+  preRequisite Course @relation(fields: [preRequisiteId], references: [id], name: "PrerequisiteToCourse")
+
+  @@id([courseId, preRequisiteId])
 }

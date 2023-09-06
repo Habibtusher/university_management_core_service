@@ -19,6 +19,41 @@
             "date": 1693713780192,
             "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\errors\\phu-2023-03-09-10-error.log",
             "hash": "9e2eaa390eed87ab7b8dbc4d8a03b229f5c3a0c68b82ad937f73489f46dcba84"
+        },
+        {
+            "date": 1693797823782,
+            "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\errors\\phu-2023-04-09-09-error.log",
+            "hash": "fdcd5dcd54b366edb134a51728360c56222da6de1b1dd09816c87eeeb8bbae97"
+        },
+        {
+            "date": 1693801893883,
+            "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\errors\\phu-2023-04-09-10-error.log",
+            "hash": "8e089108cf2180464e953dd3d61ddd715b2aa5370cbe2a3dfae9cccd03176cba"
+        },
+        {
+            "date": 1693803633706,
+            "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\errors\\phu-2023-04-09-11-error.log",
+            "hash": "06bc6a0719e717cc1e4334d6853ae48d0133fc9f7c3dca1dd9490bb88ebc8acf"
+        },
+        {
+            "date": 1693807940089,
+            "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\errors\\phu-2023-04-09-12-error.log",
+            "hash": "4b2453b5f906b3db44e673af691dadee41272bb61a35f216e3924dcbf4e0da72"
+        },
+        {
+            "date": 1693890478469,
+            "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\errors\\phu-2023-05-09-11-error.log",
+            "hash": "392b4d10307efaefb1bcd00a3851b9a86074aa9b8e53f4f1215deb234c67cba8"
+        },
+        {
+            "date": 1693893632493,
+            "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\errors\\phu-2023-05-09-12-error.log",
+            "hash": "f52ea213fb17e9581d005dec71cfc01f32fdb6b6962d2f3ee4689ea9440ead8c"
+        },
+        {
+            "date": 1693976388615,
+            "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\errors\\phu-2023-06-09-10-error.log",
+            "hash": "7b7680a831ac36e8e1beee5798d8e79c0382f5947d485f27b20488bab7f26822"
         }
     ],
     "hashType": "sha256"
