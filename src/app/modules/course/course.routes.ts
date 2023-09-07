@@ -14,6 +14,24 @@ router.post(
     auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
     CourseController.insertIntoDb
 );
+router.post(
+    '/:id/assign-faculty',
+    validateRequest(CourseValidation.assignOrRemoveFaculties),
+    auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+    CourseController.assignFaculties
+);
+router.post(
+    '/:id/remove-faculty',
+    validateRequest(CourseValidation.assignOrRemoveFaculties),
+    auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+    CourseController.removeFaculties
+);
+router.patch(
+    '/:id',
+    validateRequest(CourseValidation.update),
+    // auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+    CourseController.updateOneInDb
+);
 router.delete(
     '/:id',
     auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
