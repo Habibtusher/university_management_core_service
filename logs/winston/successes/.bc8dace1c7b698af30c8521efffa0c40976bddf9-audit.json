@@ -94,6 +94,11 @@
             "date": 1694240809847,
             "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\successes\\phu-2023-09-09-12-success.log",
             "hash": "498d5fdf77fcba666e961520cf835bb1364a508800a8c7287d42549f3772a586"
+        },
+        {
+            "date": 1694242854736,
+            "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\successes\\phu-2023-09-09-13-success.log",
+            "hash": "aca85cf7fcd0ea181d30e4803b962155938cbcdecb025e86961850e955609dcf"
         }
     ],
     "hashType": "sha256"
