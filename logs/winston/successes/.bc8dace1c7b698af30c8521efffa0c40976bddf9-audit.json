@@ -114,6 +114,21 @@
             "date": 1694412039444,
             "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\successes\\phu-2023-11-09-12-success.log",
             "hash": "ccc2e4f6ab42a6c9fa27d5003f731f244221c06bcaa35f820bd5832071387eb7"
+        },
+        {
+            "date": 1694582672962,
+            "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\successes\\phu-2023-13-09-11-success.log",
+            "hash": "ee34ea62f6133693bb283e5ad02c6f9843a33111d89fb1cc963563316231d3fe"
+        },
+        {
+            "date": 1694753088662,
+            "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\successes\\phu-2023-15-09-10-success.log",
+            "hash": "92724149367ba96f89313d4c0ff863e101f160b50379867f00c8368a4939d9d8"
+        },
+        {
+            "date": 1694755822421,
+            "name": "G:\\Level 2 PHero\\university_management_core_service\\logs\\winston\\successes\\phu-2023-15-09-11-success.log",
+            "hash": "2f41d6a7630bdd287d06e291b5753685c0a74082f8ab864133c47fbd86db55ff"
         }
     ],
     "hashType": "sha256"

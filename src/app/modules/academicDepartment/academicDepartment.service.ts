@@ -3,7 +3,7 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { AcademicDepartmentSearchableFields } from './academicDepartment.const';
+import { AcademicDepartmentSearchableFields, academicDepartmentRelationalFields, academicDepartmentRelationalFieldsMapper } from './academicDepartment.const';
 import { IAcademicDepartmentFilterRequest } from './academicDepartment.interface';
 
 const insertIntoDb = async (
@@ -25,31 +25,40 @@ const getAllData = async (
   const { page, limit, skip } = paginationHelpers.calculatePagination(options);
   const { searchTerm, ...filterData } = filters;
 
-  const andCondition = [];
-  if (Object.keys(filterData).length) {
-    andCondition.push({
-      AND: Object.keys(filterData).map(key => ({
-        [key]: {
-          equals: (filterData as any)[key],
-        },
-      })),
-    });
-  }
-  console.log(filterData);
-
+  const andConditions = [];
+ 
   if (searchTerm) {
-    andCondition.push({
-      OR: AcademicDepartmentSearchableFields.map(field => ({
-        [field]: {
-          contains: searchTerm,
-          mode: 'insensitive',
-        },
-      })),
+    andConditions.push({
+        OR: AcademicDepartmentSearchableFields.map((field) => ({
+            [field]: {
+                contains: searchTerm,
+                mode: 'insensitive'
+            }
+        }))
     });
-  }
+}
 
+if (Object.keys(filterData).length > 0) {
+    andConditions.push({
+        AND: Object.keys(filterData).map((key) => {
+            if (academicDepartmentRelationalFields.includes(key)) {
+                return {
+                    [academicDepartmentRelationalFieldsMapper[key]]: {
+                        id: (filterData as any)[key]
+                    }
+                };
+            } else {
+                return {
+                    [key]: {
+                        equals: (filterData as any)[key]
+                    }
+                };
+            }
+        })
+    });
+}
   const whereConditions: Prisma.AcademicDepartmentWhereInput =
-    andCondition.length > 0 ? { AND: andCondition } : {};
+    andConditions.length > 0 ? { AND: andConditions } : {};
   const result = await prisma.academicDepartment.findMany({
     include: {
       academiFaculty: true,
