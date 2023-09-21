@@ -1,10 +1,15 @@
-import { Prisma, Room } from "@prisma/client";
-import { paginationHelpers } from "../../../helpers/paginationHelper";
-import { IGenericResponse } from "../../../interfaces/common";
-import { IPaginationOptions } from "../../../interfaces/pagination";
-import prisma from "../../../shared/prisma";
-import { roomRelationalFields, roomRelationalFieldsMapper, roomSearchableFields } from "./room.constant";
-import { IRoomFilterRequest } from "./room.interface";
+import { Prisma, Room } from '@prisma/client';
+import { paginationHelpers } from '../../../helpers/paginationHelper';
+import { IGenericResponse } from '../../../interfaces/common';
+import { IPaginationOptions } from '../../../interfaces/pagination';
+import prisma from '../../../shared/prisma';
+import {
+    roomRelationalFields,
+    roomRelationalFieldsMapper,
+    roomSearchableFields
+} from './room.constants';
+import { IRoomFilterRequest } from './room.interface';
+
 
 const insertIntoDB = async (data: Room): Promise<Room> => {
     const result = await prisma.room.create({
@@ -15,6 +20,7 @@ const insertIntoDB = async (data: Room): Promise<Room> => {
     });
     return result;
 };
+
 const getAllFromDB = async (
     filters: IRoomFilterRequest,
     options: IPaginationOptions
@@ -122,10 +128,11 @@ const deleteByIdFromDB = async (id: string): Promise<Room> => {
     });
     return result;
 };
+
 export const RoomService = {
-    insertIntoDB,  
+    insertIntoDB,
     getAllFromDB,
     getByIdFromDB,
     updateOneInDB,
     deleteByIdFromDB
-}
+};

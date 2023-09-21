@@ -1,57 +1,66 @@
-import { Building, Prisma } from '@prisma/client';
-import { paginationHelpers } from '../../../helpers/paginationHelper';
-import { IGenericResponse } from '../../../interfaces/common';
-import { IPaginationOptions } from '../../../interfaces/pagination';
-import prisma from '../../../shared/prisma';
-import { BuildingSearchableFields } from './building.constant';
-import { IBuildingFilterRequest } from './building.interface';
+/* eslint-disable no-undef */
+import { Building, Prisma } from "@prisma/client";
+import { paginationHelpers } from "../../../helpers/paginationHelper";
+import { IGenericResponse } from "../../../interfaces/common";
+import { IPaginationOptions } from "../../../interfaces/pagination";
+import prisma from "../../../shared/prisma";
+import { buildingSearchableFields } from "./building.constants";
+import { IBuildingFilterRequest } from "./building.interface";
 
-const insertIntoDb =async (data:Building) :Promise<Building> => {
+const insertIntoDB = async (data: Building): Promise<Building> => {
     const result = await prisma.building.create({
         data
     })
-    return result
+    return result;
 }
 
-const getAllFromDb =async (filters:IBuildingFilterRequest,options:IPaginationOptions) :Promise<IGenericResponse<Building[]>> => {
+const getAllFromDB = async (
+    filters: IBuildingFilterRequest,
+    options: IPaginationOptions
+): Promise<IGenericResponse<Building[]>> => {
     const { page, limit, skip } = paginationHelpers.calculatePagination(options);
     const { searchTerm } = filters;
-    const andCondition = [];
+
+    const andConditons = [];
+
     if (searchTerm) {
-        andCondition.push({
-          OR: BuildingSearchableFields.map(field => ({
-            [field]: {
-              contains: searchTerm,
-              mode: 'insensitive',
-            },
-          })),
-        });
-      }
-      const whereConditions: Prisma.BuildingWhereInput =
-      andCondition.length > 0 ? { AND: andCondition } : {};
+        andConditons.push({
+            OR: buildingSearchableFields.map((field) => ({
+                [field]: {
+                    contains: searchTerm,
+                    mode: 'insensitive'
+                }
+            }))
+        })
+    }
+
+    const whereConditons: Prisma.BuildingWhereInput =
+        andConditons.length > 0 ? { AND: andConditons } : {};
 
     const result = await prisma.building.findMany({
-        where: whereConditions,
         skip,
         take: limit,
-        orderBy:
-          options.sortBy && options.sortOrder
+        where: whereConditons,
+        orderBy: options.sortBy && options.sortOrder
             ? {
-                [options.sortBy]: options.sortOrder,
-              }
+                [options.sortBy]: options.sortOrder
+            }
             : {
-                createdAt: 'desc',
-              }
+                createdAt: 'desc'
+            }
+    });
+    const total = await prisma.building.count({
+        where: whereConditons
     })
-    const total = await prisma.building.count();
+
     return {
         meta: {
-          total,
-          page,
-          limit,
+            page,
+            limit,
+            total
         },
-        data: result,
-      };
+        data: result
+    };
 }
 
 const getByIdFromDB = async (id: string): Promise<Building | null> => {
@@ -60,7 +69,6 @@ const getByIdFromDB = async (id: string): Promise<Building | null> => {
             id
         }
     });
-   
     return result;
 };
 
@@ -82,10 +90,11 @@ const deleteByIdFromDB = async (id: string): Promise<Building> => {
     });
     return result;
 };
+
 export const BuildingService = {
-    insertIntoDb,
-    getAllFromDb,
+    insertIntoDB,
+    getAllFromDB,
     getByIdFromDB,
-    deleteByIdFromDB,
-    updateOneInDB
+    updateOneInDB,
+    deleteByIdFromDB
 }

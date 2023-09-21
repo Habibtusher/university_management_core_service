@@ -1,3 +1,4 @@
 export type IAcademicDepartmentFilterRequest = {
-  searchTerm?: string;
-};
+    searchTerm?: string | undefined;
+    academicFacultyId?: string | undefined;
+}

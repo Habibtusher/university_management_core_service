@@ -1,25 +1,25 @@
-import { Request, Response } from 'express';
-import httpStatus from 'http-status';
-import { paginationFields } from '../../../constants/pagination';
-import catchAsync from '../../../shared/catchAsync';
-import pick from '../../../shared/pick';
-import sendResponse from '../../../shared/sendResponse';
-import { semesterRegistrationFilterableFields } from './semesterRegistration.constant';
-import { SemesterRegistrationService } from './semesterRegistration.service';
+import { Request, Response } from "express";
+import httpStatus from "http-status";
+import catchAsync from "../../../shared/catchAsync";
+import pick from "../../../shared/pick";
+import sendResponse from "../../../shared/sendResponse";
+import { semesterRegistrationFilterableFields } from "./semesterRegistration.constants";
+import { SemesterRegistrationService } from "./semesterRegistration.service";
 
-const insertIntoDb = catchAsync(async (req: Request, res: Response) => {
-  const result = await SemesterRegistrationService.insertIntoDb(req.body);
+const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
+    const result = await SemesterRegistrationService.insertIntoDB(req.body);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Semester Registration created",
+        data: result
+    })
+})
 
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: `Semester Registration Added Successfully`,
-    data: result,
-  });
-});
+
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     const filters = pick(req.query, semesterRegistrationFilterableFields);
-    const options = pick(req.query,paginationFields);
+    const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
     const result = await SemesterRegistrationService.getAllFromDB(filters, options);
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -63,9 +63,9 @@ const deleteByIdFromDB = catchAsync(async (req: Request, res: Response) => {
         data: result
     });
 })
+
 const startMyRegistration = catchAsync(async (req: Request, res: Response) => {
     const user = (req as any).user;
-
     const result = await SemesterRegistrationService.startMyRegistration(user.userId)
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -74,6 +74,7 @@ const startMyRegistration = catchAsync(async (req: Request, res: Response) => {
         data: result
     });
 })
+
 const enrollIntoCourse = catchAsync(async (req: Request, res: Response) => {
 
     const user = (req as any).user;
@@ -111,10 +112,10 @@ const confirmMyRegistration = catchAsync(async (req: Request, res: Response) => 
 })
 
 const getMyRegistration = catchAsync(async (req: Request, res: Response) => {
-    
+    console.log("get my reg")
     const user = (req as any).user;
     const result = await SemesterRegistrationService.getMyRegistration(user.userId)
-  
+    console.log(result)
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -122,8 +123,34 @@ const getMyRegistration = catchAsync(async (req: Request, res: Response) => {
         data: result
     });
 })
-export const SemesterRegistrationController ={
-    insertIntoDb,
+
+const startNewSemester = catchAsync(async (req: Request, res: Response) => {
+    // /:id/start-new-semester
+    const { id } = req.params;
+    const result = await SemesterRegistrationService.startNewSemester(id);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Semester Started Successfully!',
+        data: result
+    });
+})
+
+
+const getMySemesterRegCouses = catchAsync(async (req: Request, res: Response) => {
+    const user = (req as any).user;
+    const result = await SemesterRegistrationService.getMySemesterRegCouses(user.userId)
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'My registration courses data fatched!',
+        data: result
+    });
+})
+
+
+export const SemesterRegistrationController = {
+    insertIntoDB,
     getAllFromDB,
     getByIdFromDB,
     updateOneInDB,
@@ -132,5 +159,7 @@ export const SemesterRegistrationController ={
     enrollIntoCourse,
     withdrawFromCourse,
     confirmMyRegistration,
-    getMyRegistration
+    getMyRegistration,
+    startNewSemester,
+    getMySemesterRegCouses
 }

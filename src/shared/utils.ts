@@ -8,6 +8,7 @@ export const asyncForEach = async (array: any[], callback: any) => {
         await callback(array[index], index, array)
     }
 }
+
 export const hasTimeConflict = (
     existingSlots: {
         startTime: string,

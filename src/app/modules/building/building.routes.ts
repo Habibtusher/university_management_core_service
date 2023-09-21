@@ -3,20 +3,23 @@ import { ENUM_USER_ROLE } from '../../../enums/user';
 import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
 import { BuildingController } from './building.controller';
-import { BuildingValidation } from './building.validation';
+import { BuildingValidations } from './building.validations';
+
 const router = express.Router();
-router.get('/', BuildingController.getAllFromDb);
+
+router.get('/', BuildingController.getAllFromDB);
 router.get('/:id', BuildingController.getByIdFromDB);
+
 router.post(
-  '/',
-  auth(ENUM_USER_ROLE.SUPER_ADMIN,ENUM_USER_ROLE.ADMIN),
-  validateRequest(BuildingValidation.create),
-  BuildingController.insertIntoDb
-);
+    '/',
+    auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+    validateRequest(BuildingValidations.create),
+    BuildingController.insertIntoDB);
+
 
 router.patch(
     '/:id',
-    validateRequest(BuildingValidation.update),
+    validateRequest(BuildingValidations.update),
     auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
     BuildingController.updateOneInDB
 );
@@ -26,4 +29,5 @@ router.delete(
     auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
     BuildingController.deleteByIdFromDB
 );
-export const BuildingRoutes = router;
+
+export const buildingRoutes = router;

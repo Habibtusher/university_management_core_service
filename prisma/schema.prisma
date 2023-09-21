@@ -11,16 +11,20 @@ datasource db {
 }
 
 model AcademicSemester {
-  id                    String                 @id @default(uuid())
-  year                  String
-  title                 String
-  code                  String
-  startMonth            String
-  endMonth              String
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @updatedAt
-  students              Student[]
-  semesterRegistrations SemesterRegistration[]
+  id                         String                      @id @default(uuid())
+  year                       Int
+  title                      String
+  code                       String
+  startMonth                 String
+  endMonth                   String
+  isCurrent                  Boolean?                    @default(false)
+  createdAt                  DateTime                    @default(now())
+  updatedAt                  DateTime                    @updatedAt
+  students                   Student[]
+  semesterRegistrations      SemesterRegistration[]
+  studentEnrolledCourses     StudentEnrolledCourse[]
+  studentEnrolledCourseMarks StudentEnrolledCourseMark[]
+  studentSemesterPayments    StudentSemesterPayment[]
 
   @@map("academic_semesters")
 }
@@ -43,7 +47,7 @@ model AcademicDepartment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  academiFaculty    AcademicFaculty @relation(fields: [academicFacultyId], references: [id])
+  academicFaculty   AcademicFaculty @relation(fields: [academicFacultyId], references: [id])
   academicFacultyId String
   students          Student[]
   faculties         Faculty[]
@@ -58,7 +62,7 @@ model Student {
   firstName    String
   lastName     String
   middleName   String
-  profileImage String
+  profileImage String?
   email        String
   contactNo    String
   gender       String
@@ -69,13 +73,17 @@ model Student {
   academicSemester   AcademicSemester @relation(fields: [academicSemesterId], references: [id])
   academicSemesterId String
 
-  academicFaculty   AcademicFaculty @relation(fields: [academicFacultyId], references: [id])
-  academicFacultyId String
+  academicDepartment   AcademicDepartment @relation(fields: [academicDepartmentId], references: [id])
+  academicDepartmentId String
 
-  academicDepartment                AcademicDepartment                  @relation(fields: [academicDepartmentId], references: [id])
-  academicDepartmentId              String
-  studentSemesterRegistration       StudentSemesterRegistration[]
-  studentSemesterRegistrationCourse StudentSemesterRegistrationCourse[]
+  academicFaculty                    AcademicFaculty                     @relation(fields: [academicFacultyId], references: [id])
+  academicFacultyId                  String
+  studentSemesterRegistrations       StudentSemesterRegistration[]
+  studentSemesterRegistrationCourses StudentSemesterRegistrationCourse[]
+  studentEnrolledCourses             StudentEnrolledCourse[]
+  studentEnrolledCourseMarks         StudentEnrolledCourseMark[]
+  studentSemesterPayments            StudentSemesterPayment[]
+  studentAcademicInfos               StudentAcademicInfo[]
 
   @@map("students")
 }
@@ -95,11 +103,11 @@ model Faculty {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  academicFaculty   AcademicFaculty @relation(fields: [academicFacultyId], references: [id])
-  academicFacultyId String
+  academicDepartment   AcademicDepartment @relation(fields: [academicDepartmentId], references: [id])
+  academicDepartmentId String
 
-  academicDepartment          AcademicDepartment           @relation(fields: [academicDepartmentId], references: [id])
-  academicDepartmentId        String
+  academicFaculty             AcademicFaculty              @relation(fields: [academicFacultyId], references: [id])
+  academicFacultyId           String
   courses                     CourseFaculty[]
   offeredCourseClassSchedules OfferedCourseClassSchedule[]
 
@@ -130,16 +138,17 @@ model Room {
 }
 
 model Course {
-  id              String                 @id @default(uuid())
-  title           String
-  code            String
-  credits         Int                    @default(0)
-  createdAt       DateTime               @default(now())
-  updatedAt       DateTime               @updatedAt
-  preRequisite    CourseToPrerequisite[] @relation("CourseToPrerequisite")
-  preRequisiteFor CourseToPrerequisite[] @relation("PrerequisiteToCourse")
-  faculties       CourseFaculty[]
-  offeredCourses  OfferedCourse[]
+  id                     String                  @id @default(uuid())
+  title                  String
+  code                   String
+  credits                Int                     @default(0)
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  preRequisite           CourseToPrerequisite[]  @relation("CourseToPrerequisite")
+  preRequisiteFor        CourseToPrerequisite[]  @relation("PrerequisiteToCourse")
+  faculties              CourseFaculty[]
+  offeredCourses         OfferedCourse[]
+  studentEnrolledCourses StudentEnrolledCourse[]
 
   @@map("courses")
 }
@@ -166,21 +175,21 @@ model CourseFaculty {
 }
 
 model SemesterRegistration {
-  id                                String                              @id @default(uuid())
-  startDate                         DateTime
-  endDate                           DateTime
-  status                            SemesterRegistrationStatus?         @default(UPCOMING)
-  minCredit                         Int                                 @default(0)
-  maxCredit                         Int                                 @default(0)
-  createdAt                         DateTime                            @default(now())
-  updatedAt                         DateTime                            @updatedAt
-  academicSemesterId                String
-  academicSemester                  AcademicSemester                    @relation(fields: [academicSemesterId], references: [id])
-  offeredCourses                    OfferedCourse[]
-  offeredCourseSections             OfferedCourseSection[]
-  offeredCourseClassSchedules       OfferedCourseClassSchedule[]
-  studentSemesterRegistration       StudentSemesterRegistration[]
-  studentSemesterRegistrationCourse StudentSemesterRegistrationCourse[]
+  id                                 String                              @id @default(uuid())
+  startDate                          DateTime
+  endDate                            DateTime
+  status                             SemesterRegistrationStatus?         @default(UPCOMING)
+  minCredit                          Int                                 @default(0)
+  maxCredit                          Int                                 @default(0)
+  createdAt                          DateTime                            @default(now())
+  updatedAt                          DateTime                            @updatedAt
+  academicSemesterId                 String
+  academicSemester                   AcademicSemester                    @relation(fields: [academicSemesterId], references: [id])
+  offeredCourses                     OfferedCourse[]
+  offeredCourseSections              OfferedCourseSection[]
+  offeredCourseClassSchedules        OfferedCourseClassSchedule[]
+  studentSemesterRegistrations       StudentSemesterRegistration[]
+  studentSemesterRegistrationCourses StudentSemesterRegistrationCourse[]
 
   @@map("semester_registrations")
 }
@@ -195,10 +204,10 @@ model OfferedCourse {
   academicDepartmentId String
   academicDepartment   AcademicDepartment @relation(fields: [academicDepartmentId], references: [id])
 
-  semesterRegistrationId            String
-  semesterRegistration              SemesterRegistration                @relation(fields: [semesterRegistrationId], references: [id])
-  offeredCourseSections             OfferedCourseSection[]
-  studentSemesterRegistrationCourse StudentSemesterRegistrationCourse[]
+  semesterRegistrationId             String
+  semesterRegistration               SemesterRegistration                @relation(fields: [semesterRegistrationId], references: [id])
+  offeredCourseSections              OfferedCourseSection[]
+  studentSemesterRegistrationCourses StudentSemesterRegistrationCourse[]
 
   @@map("offered_courses")
 }
@@ -213,10 +222,10 @@ model OfferedCourseSection {
   offeredCourseId          String
   offeredCourse            OfferedCourse @relation(fields: [offeredCourseId], references: [id])
 
-  semesterRegistrationId            String
-  semesterRegistration              SemesterRegistration                @relation(fields: [semesterRegistrationId], references: [id])
-  offeredCourseClassSchedules       OfferedCourseClassSchedule[]
-  studentSemesterRegistrationCourse StudentSemesterRegistrationCourse[]
+  semesterRegistrationId             String
+  semesterRegistration               SemesterRegistration                @relation(fields: [semesterRegistrationId], references: [id])
+  offeredCourseClassSchedules        OfferedCourseClassSchedule[]
+  studentSemesterRegistrationCourses StudentSemesterRegistrationCourse[]
 
   @@map("offered_course_sections")
 }
@@ -273,6 +282,78 @@ model StudentSemesterRegistrationCourse {
   @@map("student_semester_registration_courses")
 }
 
+model StudentEnrolledCourse {
+  id                         String                       @id @default(uuid())
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime                     @updatedAt
+  studentId                  String
+  student                    Student                      @relation(fields: [studentId], references: [id])
+  courseId                   String
+  course                     Course                       @relation(fields: [courseId], references: [id])
+  academicSemesterId         String
+  academicSemester           AcademicSemester             @relation(fields: [academicSemesterId], references: [id])
+  grade                      String?
+  point                      Float?                       @default(0)
+  totalMarks                 Int?                         @default(0)
+  status                     StudentEnrolledCourseStatus? @default(ONGOING)
+  studentEnrolledCourseMarks StudentEnrolledCourseMark[]
+
+  @@map("student_enrolled_courses")
+}
+
+model StudentEnrolledCourseMark {
+  id                      String                @id @default(uuid())
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
+  studentId               String
+  student                 Student               @relation(fields: [studentId], references: [id])
+  studentEnrolledCourseId String
+  studentEnrolledCourse   StudentEnrolledCourse @relation(fields: [studentEnrolledCourseId], references: [id])
+  academicSemesterId      String
+  academicSemester        AcademicSemester      @relation(fields: [academicSemesterId], references: [id])
+  grade                   String?
+  marks                   Int?
+  examType                ExamType?             @default(MIDTERM)
+
+  @@map("student_enrolled_course_marks")
+}
+
+model StudentSemesterPayment {
+  id                 String           @id @default(uuid())
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  studentId          String
+  student            Student          @relation(fields: [studentId], references: [id])
+  academicSemesterId String
+  academicSemester   AcademicSemester @relation(fields: [academicSemesterId], references: [id])
+
+  fullPaymentAmount    Int?           @default(0)
+  partialPaymentAmount Int?           @default(0)
+  totalDueAmount       Int?           @default(0)
+  totalPaidAmount      Int?           @default(0)
+  paymentStatus        PaymentStatus? @default(PENDING)
+
+  @@map("student_semester_payments")
+}
+
+model StudentAcademicInfo {
+  id                   String   @id @default(uuid())
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  studentId            String
+  student              Student  @relation(fields: [studentId], references: [id])
+  totalCompletedCredit Int?     @default(0)
+  cgpa                 Float?   @default(0)
+
+  @@map("student_academic_infos")
+}
+
+enum SemesterRegistrationStatus {
+  UPCOMING
+  ONGOING
+  ENDED
+}
+
 enum WeekDays {
   SATURDAY
   SUNDAY
@@ -283,8 +364,19 @@ enum WeekDays {
   FRIDAY
 }
 
-enum SemesterRegistrationStatus {
-  UPCOMING
+enum StudentEnrolledCourseStatus {
   ONGOING
-  ENDED
+  COMPLETED
+  WITHDRAWN
+}
+
+enum ExamType {
+  MIDTERM
+  FINAL
+}
+
+enum PaymentStatus {
+  PENDING
+  PARTIAL_PAID
+  FULL_PAID
 }

@@ -1,65 +1,72 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
-import { paginationFields } from '../../../constants/pagination';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
-import { AcademicDepartmentFilterableFields } from './academicDepartment.const';
+import { academicDepartmentFilterableFields } from './academicDepartment.contants';
 import { AcademicDepartmentService } from './academicDepartment.service';
 
-const insertntoDb = catchAsync(async (req: Request, res: Response) => {
-  const { ...academicSemesterData } = req.body;
-  const result = await AcademicDepartmentService.insertIntoDb(
-    academicSemesterData
-  );
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'academic department created successfully!',
-    data: result,
-  });
+const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
+    const result = await AcademicDepartmentService.insertIntoDB(req.body);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'AcademicDepartment created successfully',
+        data: result
+    });
 });
-const getAllData = catchAsync(async (req: Request, res: Response) => {
-  const filters = pick(req.query, AcademicDepartmentFilterableFields);
-  const options = pick(req.query, paginationFields);
 
-  const result = await AcademicDepartmentService.getAllData(filters, options);
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'academic department retrived successfully!',
-    data: result.data,
-    meta: result.meta,
-  });
+const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
+    const filters = pick(req.query, academicDepartmentFilterableFields);
+    const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
+    const result = await AcademicDepartmentService.getAllFromDB(filters, options);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'AcademicDepartments fetched successfully',
+        meta: result.meta,
+        data: result.data
+    });
 });
-const getDataById = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
 
-  const result = await AcademicDepartmentService.getDataById(id);
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'academic department retrived successfully!',
-    data: result,
-  });
+const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await AcademicDepartmentService.getByIdFromDB(id);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'AcademicDepartment fetched successfully',
+        data: result
+    });
 });
-// const uniqueSemester = catchAsync(async (req: Request, res: Response) => {
-//   console.log('hello babes');
-//   const result = await AcademicSemesterService.uniqueSemester();
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'unique department retrived successfully!',
-//     data: result,
-//   });
-// });
+const updateOneInDB = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await AcademicDepartmentService.updateOneInDB(id, req.body);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'AcademicDepartment updated successfully',
+        data: result
+    });
+});
+
+const deleteByIdFromDB = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await AcademicDepartmentService.deleteByIdFromDB(id);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'AcademicDepartment delete successfully',
+        data: result
+    });
+});
+
 
 export const AcademicDepartmentController = {
-  insertntoDb,
-  getAllData,
-  getDataById,
+    insertIntoDB,
+    getAllFromDB,
+    getByIdFromDB,
+    updateOneInDB,
+    deleteByIdFromDB
 };

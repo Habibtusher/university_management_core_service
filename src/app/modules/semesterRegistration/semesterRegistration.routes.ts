@@ -2,30 +2,42 @@ import express from 'express';
 import { ENUM_USER_ROLE } from '../../../enums/user';
 import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
-
 import { SemesterRegistrationController } from './semesterRegistration.controller';
-import { SemesterRegistrationValidation } from './semesterRegistration.validation';
+import { SemesterRegistrationValidation } from './semesterRegistration.validations';
 
-const router = express.Router()
-
-
-router.get('/', SemesterRegistrationController.getAllFromDB);
+const router = express.Router();
 router.get(
-    '/my-registration',
+    '/get-my-registration',
     auth(ENUM_USER_ROLE.STUDENT),
     SemesterRegistrationController.getMyRegistration
 )
+
+router.get('/', SemesterRegistrationController.getAllFromDB);
+router.get(
+    '/get-my-semsester-courses',
+    auth(ENUM_USER_ROLE.STUDENT),
+    SemesterRegistrationController.getMySemesterRegCouses
+);
 router.get('/:id', SemesterRegistrationController.getByIdFromDB);
+
+
+router.post(
+    '/enroll-into-course',
+    validateRequest(SemesterRegistrationValidation.enrollOrWithdrawCourse),
+    auth(ENUM_USER_ROLE.STUDENT),
+    SemesterRegistrationController.enrollIntoCourse
+)
 router.post(
     '/start-registration',
     auth(ENUM_USER_ROLE.STUDENT),
     SemesterRegistrationController.startMyRegistration
 )
+
 router.post(
     '/',
     validateRequest(SemesterRegistrationValidation.create),
     auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-    SemesterRegistrationController.insertIntoDb
+    SemesterRegistrationController.insertIntoDB
 );
 
 router.patch(
@@ -40,12 +52,8 @@ router.delete(
     auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
     SemesterRegistrationController.deleteByIdFromDB
 );
-router.post(
-    '/enroll-into-course',
-    validateRequest(SemesterRegistrationValidation.enrollOrWithdrawCourse),
-    auth(ENUM_USER_ROLE.STUDENT),
-    SemesterRegistrationController.enrollIntoCourse
-)
+
+
 
 router.post(
     '/withdraw-from-course',
@@ -59,4 +67,11 @@ router.post(
     SemesterRegistrationController.confirmMyRegistration
 )
 
-export const SemesterRegistrationRoutes =router
+router.post(
+    '/:id/start-new-semester',
+    auth(ENUM_USER_ROLE.ADMIN),
+    SemesterRegistrationController.startNewSemester
+)
+
+
+export const semesterRegistrationRoutes = router;
