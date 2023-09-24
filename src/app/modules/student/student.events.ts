@@ -5,6 +5,7 @@ import { StudentService } from "./student.service";
 const initStudentEvents = () => {
     RedisClient.subscribe(EVENT_STUDENT_CREATED, async (e: string) => {
         const data = JSON.parse(e);
+        console.log("🚀 ~ file: student.events.ts:8 ~ RedisClient.subscribe ~ data:", data)
         await StudentService.createStudentFromEvent(data);
     });
 

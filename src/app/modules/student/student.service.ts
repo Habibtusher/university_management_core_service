@@ -7,11 +7,13 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { studentRelationalFields, studentRelationalFieldsMapper, studentSearchableFields } from './student.constants';
+import { RedisClient } from '../../../shared/redis';
+import { EVENT_STUDENT_DELETE, studentRelationalFields, studentRelationalFieldsMapper, studentSearchableFields } from './student.constants';
 import { IStudentFilterRequest } from './student.interface';
 import { StudentUtils } from './student.utils';
 
 const insertIntoDB = async (data: Student): Promise<Student> => {
+    console.log("object",data);
     const result = await prisma.student.create({
         data,
         include: {
@@ -136,6 +138,12 @@ const deleteFromDB = async (id: string): Promise<Student> => {
             academicFaculty: true
         }
     })
+    if (result) {
+        await RedisClient.publish(
+          EVENT_STUDENT_DELETE,
+          JSON.stringify(result)
+        );
+      }
     return result;
 }
 
@@ -269,7 +277,7 @@ const createStudentFromEvent = async (e: any) => {
         studentId: e.id,
         firstName: e.name.firstName,
         lastName: e.name.lastName,
-        middleName: e.name.middleName,
+        middleName: e.name.middleName ? e.name.middleName:"",
         email: e.email,
         contactNo: e.contactNo,
         gender: e.gender,
